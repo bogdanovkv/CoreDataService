@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "DatabaseAbstraction",
+        "repositoryURL": "https://github.com/bogdanovkv/DatabaseAbstraction",
+        "state": {
+          "branch": null,
+          "revision": "fdb142e8ca817ce285194043ccf0b5ee4d5089ae",
+          "version": "1.0.2"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
