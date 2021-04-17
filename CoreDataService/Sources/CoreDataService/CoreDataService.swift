@@ -11,6 +11,7 @@ import DatabaseAbstraction
 
 /// Сервис работы с CoreData
 @available(OSX 10.12, *)
+@available(iOS 10.0, *)
 final class CoreDataService: DatabaseServiceProtocol {
 
 
