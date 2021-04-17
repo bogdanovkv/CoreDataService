@@ -28,7 +28,14 @@ final class CoreDataService: DatabaseServiceProtocol {
 	}
 
 	convenience init() {
-		let container = NSPersistentContainer(name: "CoreDataService")
+		let bundle = Bundle.module
+		let modelURL = bundle.url(forResource: "CoreDataService", withExtension: ".momd")!
+		guard let model = NSManagedObjectModel(contentsOf: modelURL) else {
+			let container = NSPersistentContainer(name: "CoreDataService")
+			self.init(persistentContainer: container)
+			return
+		}
+		let container = NSPersistentContainer(name: "CoreDataService", managedObjectModel: model)
 		container.loadPersistentStores(completionHandler: { _, _ in })
 		self.init(persistentContainer: container)
 	}
@@ -66,6 +73,16 @@ final class CoreDataService: DatabaseServiceProtocol {
 				convertClosure(model, entity)
 			}
 			try? context.save()
+			completion()
+		}
+	}
+
+	func deleteAll(storeId: String, completion: @escaping () -> Void) {
+		let context = backgroundContext
+		context.perform {
+
+			let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: storeId)
+			(try? fetchRequest.execute())?.forEach({ context.delete($0) })
 			completion()
 		}
 	}
