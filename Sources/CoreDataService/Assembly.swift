@@ -13,7 +13,9 @@ public class Assembly {
 
 	private lazy var service = CoreDataService()
 
-	func createCoreDataService() -> DatabaseServiceProtocol {
+	public init() {}
+
+	public func createCoreDataService() -> DatabaseServiceProtocol {
 		return service
 	}
 }
