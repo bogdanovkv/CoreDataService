@@ -8,6 +8,7 @@
 import DatabaseAbstraction
 
 @available(OSX 10.12, *)
+@available(iOS 10.0, *)
 public class Assembly {
 
 	private lazy var service = CoreDataService()
