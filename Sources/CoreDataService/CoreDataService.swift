@@ -11,13 +11,8 @@ import DatabaseAbstraction
 
 /// Сервис работы с CoreData
 @available(OSX 10.12, *)
+@available(iOS 10.0, *)
 final class CoreDataService: DatabaseServiceProtocol {
-
-
-	func insert<Model>(storeId: String, models: [Model], convertClosure: @escaping (Model, StoredObjectProtocol) -> Void, completion: @escaping () -> Void) {
-
-	}
-
 
 	private let persistentCntainer: NSPersistentContainer
 	private var viewContext: NSManagedObjectContext {
@@ -62,27 +57,16 @@ final class CoreDataService: DatabaseServiceProtocol {
 		return result
 	}
 
-	func insert<Model, Entity: NSManagedObject>(models: [Model],
-												convertClosure: @escaping (Model, Entity) -> Void,
-												completion: @escaping () -> Void) {
+	func insert<Model>(storeId: String, models: [Model], convertClosure: @escaping (Model, StoredObjectProtocol) -> Void, completion: @escaping () -> Void) {
 		let context = backgroundContext
 		context.perform {
 			models.forEach { model in
-				let entity = Entity(context: self.backgroundContext)
+				let entity = NSEntityDescription.insertNewObject(forEntityName: storeId, into: context)
+
 				convertClosure(model, entity)
 			}
 			try? context.save()
 			completion()
-		}
-	}
-
-	func deleteAll<Entity: NSManagedObject>(type: Entity.Type) {
-		let context = backgroundContext
-		context.perform {
-			let request = NSFetchRequest<Entity>(entityName: NSStringFromClass(Entity.self))
-			let objects = try? request.execute()
-			objects?.forEach({ context.delete($0) })
-			try? context.save()
 		}
 	}
 }
